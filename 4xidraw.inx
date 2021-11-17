@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+<_name>4xiDraw Control</_name>
+<id>command.bullestock.4xidraw.rev1</id>
+<dependency type="extension">org.inkscape.output.svg.inkscape</dependency>
+<dependency type="executable" location="extensions">fourxidraw.py</dependency>
+<dependency type="executable" location="extensions">inkex.py</dependency>
+<param name="mode" type="notebook">
+
+<page name="plot" _gui-text="Plot">
+<_param indent="1" name="splashpage" type="description" appearance="header">
+Welcome to the 4xiDraw interface!
+</_param>
+<_param indent="2" name="splashpage2" type="description" xml:space="preserve" >
+Press 'Apply' to begin plotting.
+
+Or, look in the other tabs to adjust your settings
+and use additional 4xiDraw functions.
+
+</_param>
+</page>
+
+<page name='setup' _gui-text='Setup'>
+
+<_param name="instructions_setup" type="description" appearance="header">4xiDraw: Basic Setup</_param>
+<param indent="1" name="penUpPosition" type="int" min="0" max="255" appearance="full" 
+_gui-text="Pen height: UP:">60</param>
+<param indent="1" name="penDownPosition" type="int" min="0" max="255" appearance="full"
+_gui-text="Pen height: DOWN:">40</param>
+
+
+<param name="setupType" type="optiongroup" _gui-text="Action on 'Apply':">
+<_option value="align-mode">Raise pen</_option>	
+<_option value="toggle-pen">Raise and lower pen</_option>
+</param>
+<_param indent="1" name="instructions_setup3" type="description" xml:space="preserve">
+- Raise pen to manually
+move carriage to the Home Corner (upper left).
+
+- Raise and lower pen to check the vertical positions
+of the pen for writing and drawing.
+
+</_param>
+</page>
+
+<page name='timing' _gui-text='Timing'>
+<_param name="instructions_timing1" type="description" appearance="header">Movement speeds:</_param>
+<_param indent="1" name="instructions_timing1" type="description"  >
+Set speeds here if you want to draw more slowly with the pen down. The speeds are in GRBL units
+for $110/$111: mm/min. This is useful if you are drawing with pens that can't supply ink above
+a certain speed: for instance Sakura Gelly Roll Moonlight pens start losing flow at about
+1,000 while Metallic pens are good at 2,000. When in this situation, enabling different speeds
+will let you keep pen-up speeds higher.
+</_param>
+<param indent="1" name="applySpeed" type="boolean" _gui-text="Whether to apply speeds to pen">false</param>	
+<param indent="1" name="penDownSpeed" type="int" min="1" max="10000" _gui-text="Writing/Drawing speed (mm/min):">1000</param>	
+<param indent="1" name="penUpSpeed" type="int" min="1" max="10000" _gui-text="Pen-up movement speed (mm/min):">5000</param>
+
+<_param name="instructions_timing3" type="description" appearance="header">Pen lift and lowering speeds:</_param>
+<_param indent="1" name="instructions_timing3" type="description"  >
+Fine-tune speeds here - a higher speed will mean you waste less time waiting to move
+after raising or lowering the pen.
+</_param>
+<param indent="1" name="penLiftRate" type="int" min="20" max="1000" _gui-text="Pen raising speed (servo steps/s):">150</param>
+<param indent="1" name="penLiftDelay" type="int" min="-500" max="500" _gui-text="Added delay after raising pen (ms):">0</param>
+<param indent="1" name="penLowerRate" type="int" min="20" max="1000" _gui-text="Pen lowering speed (servo steps/s):">150</param>
+<param indent="1" name="penLowerDelay" type="int" min="-500" max="500" _gui-text="Added delay after lowering pen (ms):">0</param>
+
+<_param indent="2" name="instructions_timing4" type="description" xml:space="preserve">
+
+(Press 'Apply' to save settings.)</_param>
+</page>
+
+<page name='options' _gui-text='Options'>
+
+<_param name="instructions_options6" type="description" appearance="header">Advanced Options:</_param>
+<param indent="1" name="autoRotate" type="boolean" _gui-text="Auto-rotate page when printing">true</param>	
+<param indent="1" name="constSpeed" type="boolean" _gui-text="Use constant speed when pen is down">false</param>	
+<param indent="1" name="reportTime" type="boolean" _gui-text="Report time elapsed after each drawing">false</param> 
+<param indent="1" name="logSerial" type="boolean" _gui-text="Log serial communication">false</param> 
+
+<param indent="1" name="smoothness" type="float" min=".1" max="100" _gui-text="Curve smoothing (default: 10.0):">10.0</param>
+<param indent="1" name="cornering" type="float" min=".1" max="100" _gui-text="Cornering speed factor (default: 10.0):">10.0</param>
+
+<_param indent="2"  name="instructions_options3" type="description" xml:space="preserve">
+
+(Press 'Apply' to save settings.)</_param>
+</page>
+
+<page name="manual" _gui-text="Manual">
+<_param name="instructions_manual" type="description" appearance="header">4xiDraw Manual Control</_param>
+<_param indent="1" name="instructions_manual" type="description"  >
+You can use this tab to send "manual" commands to the 
+4xiDraw: Walk (move) the carriage, raise or lower the
+pen, or test communication
+with the machine.
+</_param>
+<param name="manualType" type="optiongroup" appearance="minimal"
+_gui-text="               Command: ">
+<_option value="none"           >- Select -</_option>
+<_option value="raise-pen"      >Raise the Pen</_option>
+<_option value="lower-pen"      >Lower the Pen</_option>
+<_option value="walk-x-motor"   >Walk Carriage (X)</_option>
+<_option value="walk-y-motor"   >Walk Carriage (Y)</_option>
+<_option value="version-check"  >Check GRBL Version</_option>
+<_option value="strip-data"     >Strip plotter data from file</_option>
+<_option value="grbl-command"   >Issue GRBL command</_option>
+</param>
+
+<param name="grblCommand" type="string" _gui-text="GRBL command:">$$</param>
+
+<param name="WalkDistance" type="float" min="-11" max="11" _gui-text="Walk distance in inches (+ or -):">1.00</param>
+
+<_param  indent="1" name="instructions_manual2" type="description" >
+Note: The manual "walk" commands move the motors
+as requested, without regard to the current 
+position. Moving too far or in the wrong direction
+could cause 4xiDraw to run into the ends of travel.
+</_param>
+<_param  indent="2" name="instructions_manual3" type="description" xml:space="preserve">
+Press 'Apply' to execute the command.
+</_param>
+</page>
+
+<page name="layers" _gui-text="Layers">
+<_param name="instructions_layer" type="description"  appearance="header">Print individual layer(s) </_param>
+<_param  indent="1" name="instructions_layer2" type="description" >
+Normally, we plot paths from all layers.  
+
+You can also choose to plot a single layer or group of 
+layers, for example to plot only a single color of ink.
+
+Pressing 'Apply' from this frame will plot only layers
+whose names begin with the selected number, which can
+be in the range 0 to 1000.
+
+For example, a layer named "5-red" will be printed if
+the number 5 is selected, but a layer named "2-black"
+or "guide lines" will not be.
+
+</_param>
+<param indent="2" name="layerNumber" type="int" min="0" max="1000" _gui-text="Plot only layers beginning with: ">1</param>
+</page>			
+
+<page name="Help" _gui-text="*">
+<_param name="instructions_general" type="description"
+xml:space="preserve">
+4xiDraw Control Inkscape extension 
+Release 0.0.1, dated 2017-04-07
+
+Copyright 2017 Evil Mad Science LLC
+Copyright 2017 Torsten Martinsen
+</_param>
+<param name="fileOutput" type="boolean" gui-hidden="true">true</param>
+</page>
+</param>
+<effect needs-live-preview="false" needs-document="no">
+<object-type>all</object-type>
+<effects-menu>
+<submenu _name="4xiDraw"/>
+</effects-menu>
+</effect>
+
+<script>
+<command reldir="extensions" interpreter="python">fourxidraw.py</command>
+</script>
+
+</inkscape-extension>
